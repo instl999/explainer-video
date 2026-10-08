@@ -1,0 +1,10 @@
+# secrets and machine settings
+.env
+.env.*
+!.env.example
+# dependencies and outputs (projects are scaffolded elsewhere, but just in case)
+node_modules/
+out/
+vo/
+review/
+*.log

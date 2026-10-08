@@ -1,0 +1,20 @@
+{
+  "name": "explainer-video-project",
+  "private": true,
+  "type": "module",
+  "description": "16:9 explainer video project made from the explainer-video skill (Node 24 runs the .ts files directly)",
+  "scripts": {
+    "check": "node tools/check.ts",
+    "scan": "node tools/scan.ts",
+    "draft": "node src/voice.ts --draft",
+    "voice": "node src/voice.ts",
+    "bgm": "node src/bgmscan.ts",
+    "preview": "node src/render.ts --sheet-every=1.5",
+    "render": "node src/render.ts --jobs=4",
+    "mix": "node src/audio.ts --mux",
+    "qa": "node src/qa.ts",
+    "review": "node tools/sheet.ts",
+    "deliver": "node src/deliver.ts"
+  },
+  "dependencies": { "@napi-rs/canvas": "^0.1.100" }
+}
