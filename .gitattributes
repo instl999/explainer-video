@@ -1,3 +1,5 @@
 * text=auto eol=lf
 *.ttf binary
 *.otf binary
+bgm/** filter=lfs diff=lfs merge=lfs -text
+sound-effects/** filter=lfs diff=lfs merge=lfs -text
