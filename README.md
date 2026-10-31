@@ -27,7 +27,8 @@ it from there:
    words, and about 66 sound-effect roles cued to the action.
 6. **Mixes and checks**: ducking, a limiter, −14 LUFS, a voice-over-background check, black/frozen-frame detection,
    and contact sheets for a frame-by-frame review. Then it delivers `<title>_16比9讲解版.mp4`, `.srt`
-   and landscape + portrait cover images (`_封面横版.jpg`, `_封面竖版.jpg`).
+   and landscape + portrait cover images (`_封面横版.jpg`, `_封面竖版.jpg`). For Douyin, `npm run vertical` also makes
+   a 9:16 safe-area version (`_9比16竖版.mp4`).
 
 Narration costs about ¥0.1 per minute and is cached, so previews and re-renders are free.
 
@@ -65,6 +66,7 @@ variables override both.
 | `TTS_RESOURCE_ID` | no | `seed-tts-2.0` | Resource id for TTS 2.0 voices |
 | `FFMPEG_DIR` | no | auto-detected | Folder with `ffmpeg.exe`/`ffprobe.exe` |
 | `JP_FONT` | no | Yu Gothic Bold | Font with Japanese glyphs |
+| `SERIF_FONT` | no | Songti SC Black / SimSun | Heavy CJK serif for `cover.font: "Serif"` (best: 思源宋体 Heavy) |
 
 \* One of the two Doubao options is required (or the `ARK_API_KEY` fallback).
 
@@ -85,7 +87,8 @@ npm run render           # full render (4 parallel jobs)
 npm run mix              # music + effects + voice, muxed into out/final.mp4
 npm run qa               # format, loudness, black/frozen frames, voice-over-background
 npm run review           # contact sheets of the final cut
-npm run deliver          # copy <title>_16比9讲解版.mp4/.srt and both covers to OUTPUT_DIR
+npm run vertical         # 9:16 safe-area version for Douyin (after npm run mix)
+npm run deliver          # copy <title>_16比9讲解版.mp4/.srt, both covers and the 9:16 version to OUTPUT_DIR
 ```
 
 Per video you write only `script.json`, `src/clips.ts`, `src/scenes.ts` and `src/timeline.ts`. The rest is the shared

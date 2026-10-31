@@ -49,6 +49,9 @@ export const CONFIG = {
   ffmpegDir: setting("FFMPEG_DIR", ""),
   /** A font with Japanese kana/kanji for book titles etc. (SmileySans lacks 貯/黒 and silently draws a wrong glyph). */
   jpFont: setting("JP_FONT", "C:/Windows/Fonts/YuGothB.ttc"),
+  /** A heavy CJK serif for the "Serif" family (covers/titles with cover.font "Serif"). Best: 思源宋体 Heavy
+   *  (Source Han Serif SC Heavy .otf). Default: the first system serif found (macOS Songti SC Black, Windows SimSun). */
+  serifFont: setting("SERIF_FONT", ["/System/Library/Fonts/Supplemental/Songti.ttc", "C:/Windows/Fonts/simsun.ttc"].find((f) => fs.existsSync(f)) ?? ""),
 };
 
 /** Where and how the TTS request goes. Default: Doubao Speech Synthesis 2.0 (豆包语音合成模型2.0, Volcano Engine speech
