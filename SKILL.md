@@ -1,6 +1,6 @@
 ---
 name: explainer-video
-description: Turn the user's footage plus copy (文案) into a finished 16:9 Chinese 财经/知识 explainer short video — rewrite the script around a strong hook, fact-check it, voice it with Volcano Ark Agent Plan TTS (默认 解说小明2.0), cut the footage with canvas motion graphics, auto-pick BGM and sound effects from the user's own libraries, mix, QA and deliver. Use whenever the user gives a video file (usually with copy or a topic) and asks to 精剪/剪成讲解短视频, 做动效, 合成配音, 横屏16:9, or to choose bgm/音效 from their folders.
+description: Turn the user's footage plus copy (文案) into a finished 16:9 Chinese 财经/知识 explainer short video — rewrite the script around a strong hook, fact-check it, voice it with Volcano Engine Doubao Speech Synthesis 2.0 (豆包语音合成模型2.0, 默认 解说小明2.0), cut the footage with canvas motion graphics, auto-pick BGM and sound effects from the user's own libraries, mix, QA and deliver. Use whenever the user gives a video file (usually with copy or a topic) and asks to 精剪/剪成讲解短视频, 做动效, 合成配音, 横屏16:9, or to choose bgm/音效 from their folders.
 ---
 
 # 16:9 explainer: footage + copy → final.mp4
@@ -9,8 +9,9 @@ You are director, writer, animator and mixer. The engine in this folder renders 
 project folder, and per video you write only four files: `script.json`, `src/clips.ts`, `src/scenes.ts`, `src/timeline.ts`.
 
 **Hard rules**
-- Never print, read aloud or copy the Ark key anywhere; never go looking for keys in other folders. It lives in
-  `~/.explainer-video/.env` (`ARK_API_KEY=`), see `.env.example`. If it is missing, ask the user to add it.
+- Never print, read aloud or copy the TTS credentials anywhere; never go looking for keys in other folders. They live in
+  `~/.explainer-video/.env` (`VOLC_TTS_API_KEY=`, or `VOLC_TTS_APP_ID=` + `VOLC_TTS_ACCESS_TOKEN=`; `ARK_API_KEY=` is
+  an Agent Plan fallback), see `.env.example`. If none is set, ask the user to add one.
 - Never invent facts. Every number, study, quote or name on screen is verified (WebSearch/WebFetch) or shown as an
   example with its assumptions ("按年利率3%估算", "示意价格"). Hedge what cannot be verified; drop what is wrong.
 - The video must read as an **explainer, not a promo**: build the look from the mechanism (paper boards, ink diagrams,
@@ -98,6 +99,6 @@ picks, anything assumed or hedged, and Sources (markdown links). Offer horizonta
 - `reference/style.md` — look, hook and pacing rules, writing and fact rules, what the user has rejected.
 - `reference/engine.md` — script.json fields, anchors, the shot/camera/transition model, overlays, impacts, render flags.
 - `reference/audio.md` — BGM catalogue with measured accents and past use; sound-role catalogue; mix targets.
-- `reference/tts.md` — Agent Plan TTS 2.0 facts (endpoint, headers, rates, timestamps, errors, cost).
+- `reference/tts.md` — Doubao Speech Synthesis 2.0 facts (and the Agent Plan fallback) (endpoint, headers, rates, timestamps, errors, cost).
 - `reference/pitfalls.md` — gotchas met so far and their fixes.
 - `examples/` — four finished videos' script, clips, scenes, timeline and beds; `examples/README.md` indexes the recipes.

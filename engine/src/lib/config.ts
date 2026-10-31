@@ -1,6 +1,7 @@
 // Settings for this machine, read once. Precedence: process environment → this project's .env → the user-level
 // ~/.explainer-video/.env → built-in defaults. Files are UTF-8 `KEY=value` lines (quotes optional, # comments).
-// ARK_API_KEY is a secret: it is only ever handed to the TTS request, never logged.
+// TTS credentials (VOLC_TTS_API_KEY, VOLC_TTS_APP_ID/VOLC_TTS_ACCESS_TOKEN, ARK_API_KEY) are secrets: they are only ever
+// handed to the TTS request, never logged.
 import fs from "node:fs";
 import os from "node:os";
 import path from "node:path";
@@ -50,9 +51,23 @@ export const CONFIG = {
   jpFont: setting("JP_FONT", "C:/Windows/Fonts/YuGothB.ttc"),
 };
 
-/** The Volcano Ark Agent Plan key (sent as X-Api-Key to the TTS endpoint). */
-export function arkKey(): string {
-  const k = setting("ARK_API_KEY");
-  if (!k) throw new Error(`ARK_API_KEY not found. Put a line ARK_API_KEY=... in ${path.join(USER_DIR, ".env")} (or this project's .env, or the environment). See .env.example in the skill folder.`);
-  return k;
+/** Where and how the TTS request goes. Default: Doubao Speech Synthesis 2.0 (豆包语音合成模型2.0, Volcano Engine speech
+ *  console), authenticated either way the console offers:
+ *  - new console:     VOLC_TTS_API_KEY=...                           → X-Api-Key
+ *  - classic console: VOLC_TTS_APP_ID=... + VOLC_TTS_ACCESS_TOKEN=... → X-Api-App-Id + X-Api-Access-Key
+ *  Fallback when only ARK_API_KEY is set: the Volcano Ark Agent Plan TTS endpoint (same voices, same request body). */
+export interface TtsAuth { provider: "doubao" | "agentplan"; url: string; headers: Record<string, string> }
+const DOUBAO_URL = "https://openspeech.bytedance.com/api/v3/tts/unidirectional";
+const AGENTPLAN_URL = "https://openspeech.bytedance.com/api/v3/plan/tts/unidirectional";
+export function ttsAuth(): TtsAuth {
+  const key = setting("VOLC_TTS_API_KEY"), app = setting("VOLC_TTS_APP_ID"), tok = setting("VOLC_TTS_ACCESS_TOKEN"), ark = setting("ARK_API_KEY");
+  if (key) return { provider: "doubao", url: DOUBAO_URL, headers: { "X-Api-Key": key } };
+  if (app && tok) return { provider: "doubao", url: DOUBAO_URL, headers: { "X-Api-App-Id": app, "X-Api-Access-Key": tok } };
+  if (ark) return { provider: "agentplan", url: AGENTPLAN_URL, headers: { "X-Api-Key": ark } };
+  throw new Error(`TTS credentials not found. Put VOLC_TTS_API_KEY=... (or VOLC_TTS_APP_ID=... and VOLC_TTS_ACCESS_TOKEN=...) in ${path.join(USER_DIR, ".env")} (or this project's .env, or the environment). See .env.example in the skill folder.`);
+}
+/** Which TTS service the settings select, or null when no credentials are set (values are never returned). */
+export function ttsProvider(): TtsAuth["provider"] | null {
+  if (setting("VOLC_TTS_API_KEY") || (setting("VOLC_TTS_APP_ID") && setting("VOLC_TTS_ACCESS_TOKEN"))) return "doubao";
+  return setting("ARK_API_KEY") ? "agentplan" : null;
 }

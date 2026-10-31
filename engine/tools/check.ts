@@ -1,11 +1,11 @@
 // Is this machine (and project) ready? Node, ffmpeg/ffprobe, the canvas module, fonts, settings, the music and effect
-// libraries and the Ark key (reported as present/absent only — never printed). `--tts` also makes one tiny paid TTS call
-// (two characters, far under ¥0.01) to prove the key and the Agent Plan subscription work.
+// libraries and the TTS credentials (reported as present/absent only — never printed). `--tts` also makes one tiny paid TTS
+// call (two characters, far under ¥0.01) to prove the credentials and the voice work.
 // Usage: node tools/check.ts [--tts]
 import fs from "node:fs";
 import path from "node:path";
 import { spawnSync } from "node:child_process";
-import { CONFIG, ENV_FILES, ROOT, USER_DIR, arkKey, setting } from "../src/lib/config.ts";
+import { CONFIG, ENV_FILES, ROOT, USER_DIR, ttsAuth, ttsProvider } from "../src/lib/config.ts";
 import { ffmpegBin } from "../src/lib/util.ts";
 
 let bad = 0;
@@ -37,8 +37,10 @@ for (const f of ["C:/Windows/Fonts/bahnschrift.ttf", "C:/Windows/Fonts/consola.t
 const found = ENV_FILES.filter((f) => fs.existsSync(f));
 if (found.length) ok(`settings file(s): ${found.join("  ,  ")}`);
 else no("no .env found", `create ${path.join(USER_DIR, ".env")} from .env.example in the skill folder`);
-if (setting("ARK_API_KEY")) ok("ARK_API_KEY is set (value not shown)");
-else no("ARK_API_KEY is not set", `add a line ARK_API_KEY=... to ${path.join(USER_DIR, ".env")}`);
+const provider = ttsProvider();
+if (provider === "doubao") ok("Doubao Speech Synthesis 2.0 credentials are set (values not shown)");
+else if (provider === "agentplan") ok("ARK_API_KEY is set (Agent Plan TTS; add VOLC_TTS_API_KEY to use Doubao Speech 2.0, the default)");
+else no("TTS credentials are not set", `add VOLC_TTS_API_KEY=... (or VOLC_TTS_APP_ID=... and VOLC_TTS_ACCESS_TOKEN=...) to ${path.join(USER_DIR, ".env")}`);
 
 const count = (d: string, rx: RegExp) => { try { return fs.readdirSync(d).filter((f) => rx.test(f)).length; } catch { return -1; } };
 const nb = count(CONFIG.bgmDir, /\.(mp3|wav|m4a|flac)$/i);
@@ -56,13 +58,13 @@ if (ns > 0) {
 try { fs.mkdirSync(CONFIG.cacheDir, { recursive: true }); fs.accessSync(CONFIG.cacheDir, fs.constants.W_OK); ok(`cache ${CONFIG.cacheDir}`); }
 catch { no(`cache ${CONFIG.cacheDir} is not writable`, "set CACHE_DIR to a writable folder"); }
 
-if (process.argv.includes("--tts") && setting("ARK_API_KEY")) {
+if (process.argv.includes("--tts") && provider) {
   const { synthesize } = await import("../src/lib/tts.ts");
   try {
-    const r = await synthesize(arkKey(), { text: "你好", speaker: CONFIG.speaker, rate: 10, sectionId: "00000000-0000-0000-0000-000000000000", pauseMs: 0, sampleRate: 24000 }, 1);
+    const r = await synthesize(ttsAuth(), { text: "你好", speaker: CONFIG.speaker, rate: 10, sectionId: "00000000-0000-0000-0000-000000000000", pauseMs: 0, sampleRate: 24000 }, 1);
     ok(`TTS works (${CONFIG.speaker}): ${(r.pcm.length / 48000).toFixed(2)} s of audio, ${r.words.length} timed characters`);
   } catch (e) {
-    no(`TTS call failed: ${String(e).slice(0, 160)}`, "check the key; HTTP 400 InvalidSubscription means the Agent Plan subscription has lapsed (renewal is the user's job)");
+    no(`TTS call failed: ${String(e).slice(0, 160)}`, provider === "doubao" ? "check the key (or App ID / Access Token) and that 豆包语音合成模型2.0 and this voice are enabled for the app in the Volcano Engine speech console" : "check the key; HTTP 400 InvalidSubscription means the Agent Plan subscription has lapsed (renewal is the user's job)");
   }
 }
 console.log(bad ? `\n${bad} problem(s): fix them before making a video.` : "\nall good.");

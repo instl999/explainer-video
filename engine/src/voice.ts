@@ -1,4 +1,4 @@
-// Narration: Agent Plan TTS 2.0 (解说小明 2.0), one request per sentence so each keeps natural prosody; results cached by
+// Narration: Doubao Speech Synthesis 2.0 (解说小明 2.0), one request per sentence so each keeps natural prosody; results cached by
 // request hash and ledgered. "holds" widen the natural gap after a phrase without re-synthesising.
 // --draft builds the same files from a fitted pace model (silent audio, no API call) so the edit can be laid out first.
 // Writes vo/voice.wav (48 kHz mono) and vo/alignment.json (per-character times on the display text).
@@ -56,7 +56,7 @@ function speechBounds(x: Float32Array): [number, number] {
 
 interface Char { d: number; c: string; start: number; end: number }
 const linesDir = ensureDir(path.join(ROOT, "vo", "lines"));
-let key: string | null = null, offset = 0;
+let key: ReturnType<typeof loadKey> | null = null, offset = 0;
 const out: unknown[] = [], pcmAll: Float32Array[] = [];
 for (const line of script.lines) {
   const { spoken, spans } = normalize(line.text, script.lexicon ?? {});
