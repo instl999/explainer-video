@@ -89,12 +89,21 @@ If low: lower that bed's `level`, trim long hit tails (`slice`/`fade`), move hit
 `npm run render && npm run mix && npm run qa` (≈2–3 min for 70 s), then `npm run review` and **look at every sheet
 of the final encode** (2.5 frames/s): empty boards, late payoffs, text clashes, transitions. Fix, re-render, re-check.
 
+## 9b · 9:16 vertical (when the user wants 竖版 / 抖音 9:16)
+The engine renders 16:9; `npm run vertical` (after `npm run mix`) renders a captionless pass and composes
+`out/final_9x16.mp4`: blurred fill, the picture 15 % larger than full width at the centre, a fixed title block above
+(`cover.lines` / `cover.hook`, `cover.font`), captions under it, clear of the app's right-hand buttons and bottom
+description area. Plan for it from the start: **keep every scene's text inside x 140–1700** (outside is trimmed) and
+make key words big (they show at ~65 % size). Check frames of `final_9x16.mp4` before delivering.
+
 ## 10 · Deliver
 `npm run deliver` → `<OUTPUT_DIR>/<title>_16比9讲解版.mp4` + `.srt`, plus the covers `<title>_封面横版.jpg` (1920×1080)
 and `<title>_封面竖版.jpg` (1080×1920), made by default (`--no-covers` skips them). Look at both covers first: the title
 must not cross a face. Set `"cover": { "focus": <0..1 where the subject is> }` in script.json (≥ 0.58 puts the landscape
 title on the left; otherwise it sits in a low band; the portrait crop centres on it), or `frame`, `lines`, `hook`, `tag`
-(see `reference/engine.md`), then `npm run cover`. Send the video, subtitles and both covers with SendUserFile.
+(see `reference/engine.md`), then `npm run cover`. A finance/commentary look: `"font": "Serif"` (heavy 宋体, no outline;
+`SERIF_FONT`). `deliver` also copies `<title>_9比16竖版.mp4` when `npm run vertical` made one. Send the videos,
+subtitles and both covers with SendUserFile.
 Report: length, specs, QA numbers, TTS cost, the structure (what happens when), how the copy changed and why, music
 picks, anything assumed or hedged, and Sources (markdown links).
 

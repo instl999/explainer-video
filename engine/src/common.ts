@@ -31,6 +31,7 @@ const FONTS: Array<[string, string]> = [
   ["C:/Windows/Fonts/consolab.ttf", "MonoB"],
   [path.join(PROJECT, "fonts", "DSEG7Classic-Bold.ttf"), "LCD"],
   [CONFIG.jpFont, "JP"],
+  [CONFIG.serifFont, "Serif"],
 ];
 let fontsDone = false;
 export function registerFonts(): void {

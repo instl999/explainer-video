@@ -4,7 +4,7 @@ import { createCanvas, type Canvas, type SKRSContext2D } from "@napi-rs/canvas";
 import { C, E, H, W, clamp, hash, lerp, prog } from "./common.ts";
 
 export type Ctx = SKRSContext2D;
-export type Fam = "Display" | "Sans" | "Num" | "Mono" | "MonoB" | "LCD" | "JP";
+export type Fam = "Display" | "Sans" | "Serif" | "Num" | "Mono" | "MonoB" | "LCD" | "JP";
 
 // ---------- text ----------
 const NUM_CH = /[0-9A-Za-z.,%+\-:\/×$#&@ ]/;

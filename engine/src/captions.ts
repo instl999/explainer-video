@@ -45,18 +45,25 @@ export function cues(): Cue[] {
 }
 const CUES = cues();
 
+/** Draws the caption phrase active at time t centred at (x, y) in the one caption style; false when none is active.
+ *  Shared by the 16:9 overlay and the 9:16 composer (src/vertical.ts), so both versions look the same. */
+export function drawCaption(ctx: Ctx, t: number, x: number, y: number, size = 56): boolean {
+  const c = CUES.find((q) => t >= q.t0 && t < q.t1);
+  if (!c) return false;
+  const a = Math.min(1, prog(t, c.t0, 0.08) + 0.4);
+  const yellow = new Set<number>();
+  [...c.s].forEach((ch, i) => { if (/[0-9.%]/.test(ch)) yellow.add(i); });
+  text(ctx, c.s, x, y, { size, fam: "Sans", color: "#fff", align: "center", stroke: "rgba(0,0,0,0.88)", strokeW: size * 0.18, alpha: a },
+    (i) => (yellow.has(i) ? { color: C.marker } : {}));
+  return true;
+}
 export function captionOverlay(hide: Array<[number, number]>): Overlay {
   return {
     id: "captions", t0: 0, t1: 1e9, z: 60,
     paint(ctx: Ctx, t: number) {
-      if (hide.some(([a, b]) => t >= a && t < b)) return;
-      const c = CUES.find((q) => t >= q.t0 && t < q.t1);
-      if (!c) return;
-      const a = Math.min(1, prog(t, c.t0, 0.08) + 0.4);
-      const yellow = new Set<number>();
-      [...c.s].forEach((ch, i) => { if (/[0-9.%]/.test(ch)) yellow.add(i); });
-      text(ctx, c.s, W / 2, H - 76, { size: 56, fam: "Sans", color: "#fff", align: "center", stroke: "rgba(0,0,0,0.88)", strokeW: 10, alpha: a },
-        (i) => (yellow.has(i) ? { color: C.marker } : {}));
+      // NO_CAPTIONS (set by `render.ts --clean`) renders the captionless pass the 9:16 composer builds on
+      if (process.env.NO_CAPTIONS || hide.some(([a, b]) => t >= a && t < b)) return;
+      drawCaption(ctx, t, W / 2, H - 76, 56);
     },
   };
 }

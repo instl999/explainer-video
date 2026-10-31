@@ -21,7 +21,7 @@
    文字逐字跟着配音弹出，转场和镜头运动都对齐到词。
 5. **用你自己的素材库配乐**：按文件名前的情绪标签选 BGM，自动算好切入点让重拍落在关键词上；约 66 种音效角色随动作出现。
 6. **混音和质检**：人声闪避、限幅、−14 LUFS 响度、人声高于背景的检查、黑帧和定帧检测，再出逐帧缩略图人工复查；
-   最后交付 `<标题>_16比9讲解版.mp4`、`.srt`，以及横版 + 竖版封面（`_封面横版.jpg`、`_封面竖版.jpg`）。
+   最后交付 `<标题>_16比9讲解版.mp4`、`.srt`，以及横版 + 竖版封面（`_封面横版.jpg`、`_封面竖版.jpg`）。发抖音时，`npm run vertical` 还会生成 9:16 安全区版本（`_9比16竖版.mp4`）。
 
 配音约 ¥0.1/分钟，并且有缓存，所以预览和重渲染都不花钱。
 
@@ -56,6 +56,7 @@ git clone https://github.com/instl999/explainer-video "%USERPROFILE%/.claude/ski
 | `TTS_RESOURCE_ID` | 否 | `seed-tts-2.0` | TTS 2.0 音色的资源 ID |
 | `FFMPEG_DIR` | 否 | 自动查找 | `ffmpeg.exe`/`ffprobe.exe` 所在文件夹 |
 | `JP_FONT` | 否 | Yu Gothic Bold | 含日文字形的字体 |
+| `SERIF_FONT` | 否 | 宋体-简 Black / SimSun | `cover.font: "Serif"` 用的粗宋体（推荐 思源宋体 Heavy） |
 
 \* 两种豆包凭证至少填一种（或使用 `ARK_API_KEY` 备选）。
 
@@ -76,7 +77,8 @@ npm run render           # 完整渲染（4 路并行）
 npm run mix              # 配乐 + 音效 + 人声，合成 out/final.mp4
 npm run qa               # 格式、响度、黑帧/定帧、人声高于背景
 npm run review           # 成片逐帧缩略图
-npm run deliver          # 把 <标题>_16比9讲解版.mp4/.srt 和横竖版封面复制到 OUTPUT_DIR
+npm run vertical         # 9:16 安全区竖版（先 npm run mix）
+npm run deliver          # 把 <标题>_16比9讲解版.mp4/.srt、横竖版封面和竖版视频复制到 OUTPUT_DIR
 ```
 
 每个视频只需写 `script.json`、`src/clips.ts`、`src/scenes.ts`、`src/timeline.ts` 四个文件，其余是共用引擎。
