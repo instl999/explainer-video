@@ -4,7 +4,7 @@ import crypto from "node:crypto";
 import { spawnSync } from "node:child_process";
 import fs from "node:fs";
 import path from "node:path";
-import { CONFIG, ROOT, arkKey } from "./config.ts";
+import { CONFIG, ROOT, ttsAuth } from "./config.ts";
 
 export { ROOT };
 export const CACHE_DIR = CONFIG.cacheDir;
@@ -27,8 +27,8 @@ export function ledger(e: { stage: string; item: string; model: string; units: n
   writeJson(file, data);
 }
 
-/** The Ark key (see config.ts for where it is read from). Never logged. */
-export const loadKey = arkKey;
+/** TTS endpoint and credentials (see config.ts for where they are read from). Never logged. */
+export const loadKey = ttsAuth;
 
 /** ffmpeg / ffprobe: FFMPEG_DIR if set, else WinGet's Gyan.FFmpeg install, else whatever is on PATH. */
 export function ffmpegBin(name: "ffmpeg" | "ffprobe"): string {
