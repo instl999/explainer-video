@@ -34,3 +34,8 @@
   with the Write tool.
 - ffmpeg `drawtext` chokes on `C:` in `fontfile` → run ffmpeg with `cwd` = project and a relative font path.
 - `sed -i` with backslashes is fragile; use the Edit tool for exact replacements.
+
+**Rendering**
+- With ffmpeg 7.x a full render could finish every frame and then never exit: a footage decoder blocked writing into its
+  paused pipe ignores SIGTERM, and the open pipe keeps the part process alive. `FrameReader.close()` now closes the pipe
+  and sends SIGKILL. If a render ever sits at 0% CPU, check for leftover `ffmpeg -v error -ss …` processes.

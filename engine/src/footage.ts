@@ -49,7 +49,9 @@ export class FrameReader {
     if (!this.last) throw new Error(`footage decode produced no frames: ${this.err.slice(0, 300)}`);
     return this.last;
   }
-  close() { if (!this.ended) this.proc.kill(); }
+  /** Stop decoding. ffmpeg 7 ignores SIGTERM while its muxer thread is blocked writing into the paused pipe, and the
+   *  open pipe then keeps this Node process alive forever; closing our end first makes that write fail at once. */
+  close() { if (!this.ended) { this.proc.stdout!.destroy(); this.proc.kill("SIGKILL"); } }
 }
 
 const grabCache = new Map<string, Buffer>();
