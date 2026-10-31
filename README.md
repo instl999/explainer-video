@@ -26,7 +26,8 @@ it from there:
 5. **Scores it from your own libraries**: music beds picked by mood label, entry points solved so beats land on key
    words, and about 66 sound-effect roles cued to the action.
 6. **Mixes and checks**: ducking, a limiter, −14 LUFS, a voice-over-background check, black/frozen-frame detection,
-   and contact sheets for a frame-by-frame review. Then it delivers `<title>_16比9讲解版.mp4` and `.srt`.
+   and contact sheets for a frame-by-frame review. Then it delivers `<title>_16比9讲解版.mp4`, `.srt`
+   and landscape + portrait cover images (`_封面横版.jpg`, `_封面竖版.jpg`).
 
 Narration costs about ¥0.1 per minute and is cached, so previews and re-renders are free.
 
@@ -84,7 +85,7 @@ npm run render           # full render (4 parallel jobs)
 npm run mix              # music + effects + voice, muxed into out/final.mp4
 npm run qa               # format, loudness, black/frozen frames, voice-over-background
 npm run review           # contact sheets of the final cut
-npm run deliver          # copy <title>_16比9讲解版.mp4/.srt to OUTPUT_DIR
+npm run deliver          # copy <title>_16比9讲解版.mp4/.srt and both covers to OUTPUT_DIR
 ```
 
 Per video you write only `script.json`, `src/clips.ts`, `src/scenes.ts` and `src/timeline.ts`. The rest is the shared

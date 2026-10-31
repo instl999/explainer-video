@@ -90,9 +90,13 @@ If low: lower that bed's `level`, trim long hit tails (`slice`/`fade`), move hit
 of the final encode** (2.5 frames/s): empty boards, late payoffs, text clashes, transitions. Fix, re-render, re-check.
 
 ## 10 · Deliver
-`npm run deliver` → `<OUTPUT_DIR>/<title>_16比9讲解版.mp4` + `.srt`. Send both with SendUserFile (display "render").
+`npm run deliver` → `<OUTPUT_DIR>/<title>_16比9讲解版.mp4` + `.srt`, plus the covers `<title>_封面横版.jpg` (1920×1080)
+and `<title>_封面竖版.jpg` (1080×1920), made by default (`--no-covers` skips them). Look at both covers first: the title
+must not cross a face. Set `"cover": { "focus": <0..1 where the subject is> }` in script.json (≥ 0.58 puts the landscape
+title on the left; otherwise it sits in a low band; the portrait crop centres on it), or `frame`, `lines`, `hook`, `tag`
+(see `reference/engine.md`), then `npm run cover`. Send the video, subtitles and both covers with SendUserFile.
 Report: length, specs, QA numbers, TTS cost, the structure (what happens when), how the copy changed and why, music
-picks, anything assumed or hedged, and Sources (markdown links). Offer horizontal + vertical cover images.
+picks, anything assumed or hedged, and Sources (markdown links).
 
 ## References
 - `reference/setup.md` — new computer: Node, FFmpeg, libraries, the `.env` (location, every key), smoke test.
