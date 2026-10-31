@@ -18,7 +18,8 @@ it from there:
 1. **Studies the footage**: cut list and contact sheets; it skips clips with burned-in subtitles or watermarks.
 2. **Rewrites the script around a hook** for the first 20 seconds, and **fact-checks** every number, study and quote.
    Unverifiable claims are hedged or shown with their assumptions.
-3. **Voices it** with Volcano Ark Agent Plan TTS 2.0 (default voice 解说小明 2.0), with per-character timestamps.
+3. **Voices it** with Volcano Engine Doubao Speech Synthesis 2.0 (豆包语音合成模型2.0, default voice 解说小明 2.0), with
+   per-character timestamps. A Volcano Ark Agent Plan key also works as a fallback.
 4. **Cuts and animates** at 1920×1080, 30 fps on a canvas engine. Explanations are paper boards with ink diagrams;
    footage gets callouts, rings and stamps. Kinetic type is synced to every word; transitions and camera moves are
    keyed to the voice.
@@ -34,7 +35,8 @@ Narration costs about ¥0.1 per minute and is cached, so previews and re-renders
 - [Claude Code](https://claude.com/claude-code) on Windows 10/11.
 - Node.js 24+ (runs the TypeScript directly) and FFmpeg:
   `winget install OpenJS.NodeJS.LTS` and `winget install Gyan.FFmpeg`.
-- A **Volcano Ark (火山方舟) Agent Plan** API key.
+- **Doubao Speech Synthesis 2.0 (豆包语音合成模型2.0)** credentials from the Volcano Engine speech console
+  (an API Key, or an App ID + Access Token). A Volcano Ark Agent Plan key works as a fallback.
 - **Your own** music folder (file names start with a mood label such as 开头紧张, 解释 or 结尾升华) and a sound-effect
   library. Neither is included. The shared roles in `engine/src/sfx-roles.ts` point at a library called 布斯的音效库,
   so edit those paths to match yours (`npm run check` lists any that are missing).
@@ -51,7 +53,9 @@ variables override both.
 
 | Key | Required | Default | Purpose |
 |---|---|---|---|
-| `ARK_API_KEY` | yes | — | Agent Plan key, sent as `X-Api-Key` to the TTS endpoint. Never logged. |
+| `VOLC_TTS_API_KEY` | yes* | — | Doubao Speech 2.0 API Key (new console), sent as `X-Api-Key`. Never logged. |
+| `VOLC_TTS_APP_ID` + `VOLC_TTS_ACCESS_TOKEN` | yes* | — | Or the classic console's App ID + Access Token. |
+| `ARK_API_KEY` | no | — | Fallback when none of the above is set: an Agent Plan key (Agent Plan TTS endpoint). |
 | `BGM_DIR` | no | `~/Desktop/bgm` | Music library |
 | `SFX_DIR` | no | `~/Desktop/布斯的音效库` | Sound-effect library (roles are relative to it) |
 | `OUTPUT_DIR` | no | folder holding the project | Where finished videos are copied |
@@ -60,6 +64,8 @@ variables override both.
 | `TTS_RESOURCE_ID` | no | `seed-tts-2.0` | Resource id for TTS 2.0 voices |
 | `FFMPEG_DIR` | no | auto-detected | Folder with `ffmpeg.exe`/`ffprobe.exe` |
 | `JP_FONT` | no | Yu Gothic Bold | Font with Japanese glyphs |
+
+\* One of the two Doubao options is required (or the `ARK_API_KEY` fallback).
 
 ## Use
 

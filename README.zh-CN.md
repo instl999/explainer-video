@@ -16,7 +16,7 @@
 
 1. **看素材**：生成切点列表和逐秒缩略图，自动避开带烧录字幕、水印的片段。
 2. **围绕钩子重写文案**，把前 20 秒做成强钩子；**逐条核实**数字、研究和引文，核实不了的就加限定或在画面上写明假设。
-3. **配音**：火山方舟 Agent Plan TTS 2.0（默认 解说小明 2.0），带逐字时间戳。
+3. **配音**：火山引擎 豆包语音合成模型2.0（默认 解说小明 2.0），带逐字时间戳；也可退而使用火山方舟 Agent Plan Key。
 4. **剪辑和动效**：1920×1080、30fps 的画布引擎。讲道理用纸面手绘图解，素材上加标注、圈画和印章；
    文字逐字跟着配音弹出，转场和镜头运动都对齐到词。
 5. **用你自己的素材库配乐**：按文件名前的情绪标签选 BGM，自动算好切入点让重拍落在关键词上；约 66 种音效角色随动作出现。
@@ -29,7 +29,7 @@
 
 - Windows 10/11 上的 [Claude Code](https://claude.com/claude-code)。
 - Node.js 24+（直接运行 TypeScript）和 FFmpeg：`winget install OpenJS.NodeJS.LTS`、`winget install Gyan.FFmpeg`。
-- 一个**火山方舟 Agent Plan** API Key。
+- **豆包语音合成模型2.0** 的凭证（火山引擎语音控制台：API Key，或 App ID + Access Token）。火山方舟 Agent Plan Key 可作为备选。
 - **你自己的** BGM 文件夹（文件名以情绪标签开头，例如 开头紧张、解释、结尾升华）和音效库，仓库里都不包含。
   `engine/src/sfx-roles.ts` 里的通用音效角色指向名为「布斯的音效库」的音效库，换成你自己的库时改一下路径即可
   （`npm run check` 会列出找不到的文件）。
@@ -45,7 +45,9 @@ git clone https://github.com/instl999/explainer-video "%USERPROFILE%/.claude/ski
 
 | 键 | 必填 | 默认值 | 用途 |
 |---|---|---|---|
-| `ARK_API_KEY` | 是 | — | Agent Plan Key，作为 `X-Api-Key` 发给 TTS 接口；不会打印到日志 |
+| `VOLC_TTS_API_KEY` | 是* | — | 豆包语音合成2.0 API Key（新版控制台），作为 `X-Api-Key` 发送；不会打印到日志 |
+| `VOLC_TTS_APP_ID` + `VOLC_TTS_ACCESS_TOKEN` | 是* | — | 或填旧版控制台的 App ID + Access Token |
+| `ARK_API_KEY` | 否 | — | 备选：以上都没填时，使用 Agent Plan Key（Agent Plan TTS 接口） |
 | `BGM_DIR` | 否 | `~/Desktop/bgm` | 配乐库 |
 | `SFX_DIR` | 否 | `~/Desktop/布斯的音效库` | 音效库（音效角色的路径相对于它） |
 | `OUTPUT_DIR` | 否 | 项目所在文件夹 | 成片复制到哪里 |
@@ -54,6 +56,8 @@ git clone https://github.com/instl999/explainer-video "%USERPROFILE%/.claude/ski
 | `TTS_RESOURCE_ID` | 否 | `seed-tts-2.0` | TTS 2.0 音色的资源 ID |
 | `FFMPEG_DIR` | 否 | 自动查找 | `ffmpeg.exe`/`ffprobe.exe` 所在文件夹 |
 | `JP_FONT` | 否 | Yu Gothic Bold | 含日文字形的字体 |
+
+\* 两种豆包凭证至少填一种（或使用 `ARK_API_KEY` 备选）。
 
 ## 使用
 
