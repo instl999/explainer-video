@@ -23,6 +23,9 @@ review/                scan sheets, previews, final sheets
   "lines": [ { "id": "s00", "text": "…", "pause": 0.4, "rate": 12, "instruction": "this line's tone",
                "holds": [["phrase", 0.25]] } ] }
 ```
+- Optional `"cover": { "lines": ["标题第一行"], "hook": "钩子问句", "tag": "小标签", "frame": <source s>, "focus": 0..1 }`
+  for the delivery covers (`src/cover.ts`). Defaults: title split at its first "：" into headline (white) + hook
+  (yellow); frame = the first footage shot's `src` + 0.4 s; focus 0.5.
 - `rate` −50…100 (0 = normal, 10 default ≈ 5.5 字/s, 24 = fast hook). `pause` = silence after the line (free to change).
 - `holds` widen the gap after a phrase at its quietest 10 ms — free, no re-synthesis.
 - Normalisation: 4-digit years before 年 read digit by digit; `x%` → 百分之x; decimals; cardinals with 两 before measure
@@ -90,4 +93,4 @@ review/                scan sheets, previews, final sheets
 ## Tools
 `npm run check [-- --tts]` · `npm run scan` / `node tools/scan.ts --frames=…` · `node tools/onsets.ts "<bgm>" a b` ·
 `node tools/sfxinfo.ts --find=…` / `<files>` · `node tools/vob.ts [--list]` · `npm run review` (final sheets) ·
-`npm run qa` · `npm run deliver [-- --name=…]` · `npm run bgm` (scan the whole music library).
+`npm run qa` · `npm run cover` · `npm run deliver [-- --name=…] [-- --no-covers]` · `npm run bgm` (scan the whole music library).

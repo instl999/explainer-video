@@ -14,6 +14,7 @@
     "mix": "node src/audio.ts --mux",
     "qa": "node src/qa.ts",
     "review": "node tools/sheet.ts",
+    "cover": "node src/cover.ts",
     "deliver": "node src/deliver.ts"
   },
   "dependencies": { "@napi-rs/canvas": "^0.1.100" }
