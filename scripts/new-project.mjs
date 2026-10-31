@@ -42,7 +42,7 @@ if (!fs.existsSync(userEnv)) {
   const home = os.homedir().replace(/\\/g, "/");
   const tpl = fs.readFileSync(path.join(SKILL, ".env.example"), "utf8").replace(/C:\/Users\/<you>/g, home);
   fs.writeFileSync(userEnv, tpl, "utf8");
-  console.log(`created ${userEnv} — open it and fill in ARK_API_KEY (and check BGM_DIR / SFX_DIR)`);
+  console.log(`created ${userEnv} — open it and fill in VOLC_TTS_API_KEY (and check BGM_DIR / SFX_DIR)`);
 }
 
 if (!args.includes("--no-install")) {

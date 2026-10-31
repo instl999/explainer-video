@@ -1,8 +1,7 @@
-// Agent Plan TTS 2.0 client: HTTP chunked/SSE stream, PCM audio plus per-character subtitle timestamps.
+// TTS 2.0 client (Doubao Speech Synthesis 2.0 by default, or Agent Plan; see config.ts ttsAuth): V3 HTTP unidirectional,
+// chunked/SSE stream, PCM audio plus per-character subtitle timestamps.
 import crypto from "node:crypto";
-import { CONFIG } from "./config.ts";
-
-const URL = "https://openspeech.bytedance.com/api/v3/plan/tts/unidirectional";
+import { CONFIG, type TtsAuth } from "./config.ts";
 
 export interface TtsWord { word: string; startTime: number; endTime: number }
 export interface TtsRequest { text: string; speaker: string; rate: number; instruction?: string; sectionId: string; pauseMs: number; sampleRate: number }
@@ -31,7 +30,7 @@ function collectWords(obj: unknown, out: TtsWord[]) {
   for (const [k, v] of Object.entries(o)) if (k !== "words") collectWords(v, out);
 }
 
-export async function synthesize(key: string, r: TtsRequest, attempts = 3): Promise<TtsResult> {
+export async function synthesize(auth: TtsAuth, r: TtsRequest, attempts = 3): Promise<TtsResult> {
   const body = {
     user: { uid: "explainer-video" },
     req_params: {
@@ -43,7 +42,7 @@ export async function synthesize(key: string, r: TtsRequest, attempts = 3): Prom
   let last: unknown;
   for (let a = 0; a < attempts; a++) {
     try {
-      const res = await fetch(URL, { method: "POST", headers: { "X-Api-Key": key, "X-Api-Resource-Id": CONFIG.ttsResource, "X-Api-Request-Id": crypto.randomUUID(),
+      const res = await fetch(auth.url, { method: "POST", headers: { ...auth.headers, "X-Api-Resource-Id": CONFIG.ttsResource, "X-Api-Request-Id": crypto.randomUUID(),
         "X-Control-Require-Usage-Tokens-Return": "text_words", "Content-Type": "application/json" }, body: JSON.stringify(body) });
       const raw = await res.text();
       if (!res.ok) throw new Error(`TTS HTTP ${res.status}: ${raw.slice(0, 200)}`);
