@@ -18,8 +18,8 @@ export const T = {
 // ---------- hook: kinetic type over footage ----------
 export function hookHud(ctx: Ctx, { t }: PaintArgs) {
   leftShade(ctx, 0.7, 0.62);
-  say(ctx, "第一句是钩子", 110, 520, WT(150), ct("s00", "第一句是钩子"), t);
-  say(ctx, "第一秒抓住人", 110, 700, { ...WT(110), color: C.marker }, ct("s00", "第一秒抓住人"), t);
+  say(ctx, "第一句是钩子", 160, 520, WT(150), ct("s00", "第一句是钩子"), t);
+  say(ctx, "第一秒抓住人", 160, 700, { ...WT(110), color: C.marker }, ct("s00", "第一秒抓住人"), t);
   xMark(ctx, 1500, 420, 120, t, T.hookEnd - 0.1, { width: 22 });
 }
 

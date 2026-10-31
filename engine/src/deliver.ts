@@ -1,6 +1,6 @@
 // Copies the finished video and its subtitles to OUTPUT_DIR (default: the folder holding this project) as
 // "<title>_16比9讲解版.mp4/.srt", where <title> is script.json "title", and makes the landscape and portrait covers
-// (src/cover.ts) as "<title>_封面横版.jpg" / "<title>_封面竖版.jpg".
+// (src/cover.ts) as "<title>_封面横版.jpg" / "<title>_封面竖版.jpg"; plus "<title>_9比16竖版.mp4" when `npm run vertical` made one.
 // Usage: node src/deliver.ts [--name=自定义文件名] [--no-covers]
 import fs from "node:fs";
 import path from "node:path";
@@ -19,6 +19,13 @@ for (const [rel, ext] of pairs) {
   if (!fs.existsSync(src)) { console.error(`[deliver] missing ${rel} — run the render, mix (--mux) and qa first`); process.exit(1); }
   const dst = path.join(out, base + ext);
   fs.copyFileSync(src, dst);
+  console.log(`[deliver] ${dst}`);
+}
+const vert = path.join(PROJECT, "out", "final_9x16.mp4"), fin = path.join(PROJECT, "out", "final.mp4");
+if (fs.existsSync(vert)) {
+  if (fs.statSync(vert).mtimeMs < fs.statSync(fin).mtimeMs) console.warn("[deliver] out/final_9x16.mp4 is older than final.mp4 — run npm run vertical again");
+  const dst = path.join(out, `${stem}_9比16竖版.mp4`);
+  fs.copyFileSync(vert, dst);
   console.log(`[deliver] ${dst}`);
 }
 if (!process.argv.includes("--no-covers")) {

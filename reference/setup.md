@@ -34,6 +34,7 @@ Save as UTF-8; use forward slashes in paths.
 | `TTS_RESOURCE_ID` | no | `seed-tts-2.0` | Resource id for TTS 2.0 (`*_uranus_*`) voices. |
 | `FFMPEG_DIR` | no | auto (WinGet, then PATH) | Folder with `ffmpeg.exe`/`ffprobe.exe` for a manual install. |
 | `JP_FONT` | no | `C:/Windows/Fonts/YuGothB.ttc` | A font with Japanese glyphs (book titles). |
+| `SERIF_FONT` | no | macOS Songti SC Black, else Windows SimSun | Heavy CJK serif for the `Serif` family (`cover.font: "Serif"`). Best: 思源宋体 Heavy. |
 
 Minimal file:
 ```
