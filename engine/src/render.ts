@@ -6,6 +6,7 @@
 //   node src/render.ts --sheet-every=1.5     contact sheets of the whole cut
 //   node src/render.ts --from=0 --to=25 --out=review/hook.mp4 [--fast]
 //   node src/render.ts --jobs=4              full render in parallel parts → out/video.mp4
+//   node src/render.ts --jobs=4 --clean      same without burned-in captions → out/video_clean.mp4 (for src/vertical.ts)
 import { spawn, spawnSync } from "node:child_process";
 import fs from "node:fs";
 import path from "node:path";
@@ -224,6 +225,7 @@ const ffmpeg = ffmpegBin("ffmpeg");
 const arg = (k: string) => process.argv.find((a) => a.startsWith(`--${k}=`))?.slice(k.length + 3);
 const flag = (k: string) => process.argv.includes(`--${k}`);
 const FRAMES = Math.ceil(END * FPS);
+if (flag("clean")) process.env.NO_CAPTIONS = "1";
 
 async function encode(f0: number, f1: number, file: string, fast: boolean) {
   ensureDir(path.dirname(file));
@@ -280,14 +282,15 @@ else if (arg("part")) {
 } else if (arg("jobs")) {
   const n = Number(arg("jobs")), t0 = performance.now();
   await Promise.all(Array.from({ length: n }, (_, k) => new Promise<void>((ok, bad) => {
-    const p = spawn(process.execPath, [process.argv[1], `--part=${k}/${n}`, ...(flag("fast") ? ["--fast"] : [])], { stdio: ["ignore", "inherit", "inherit"] });
+    const p = spawn(process.execPath, [process.argv[1], `--part=${k}/${n}`, ...(flag("fast") ? ["--fast"] : []), ...(flag("clean") ? ["--clean"] : [])], { stdio: ["ignore", "inherit", "inherit"] });
     p.on("close", (c) => (c === 0 ? ok() : bad(new Error(`part ${k} exited ${c}`))));
   })));
   const list = path.join(PROJECT, "out", "parts", "list.txt");
   fs.writeFileSync(list, Array.from({ length: n }, (_, k) => `file 'part_${k}.mp4'`).join("\n"));
-  const r = spawnSync(ffmpeg, ["-y", "-v", "error", "-f", "concat", "-safe", "0", "-i", list, "-c", "copy", path.join(PROJECT, "out", "video.mp4")], { stdio: "inherit" });
+  const name = flag("clean") ? "video_clean.mp4" : "video.mp4";
+  const r = spawnSync(ffmpeg, ["-y", "-v", "error", "-f", "concat", "-safe", "0", "-i", list, "-c", "copy", path.join(PROJECT, "out", name)], { stdio: "inherit" });
   if (r.status !== 0) throw new Error("concat failed");
-  console.log(`[render] out/video.mp4  ${FRAMES} frames, ${END.toFixed(2)} s, ${((performance.now() - t0) / 1000).toFixed(0)} s wall`);
+  console.log(`[render] out/${name}  ${FRAMES} frames, ${END.toFixed(2)} s, ${((performance.now() - t0) / 1000).toFixed(0)} s wall`);
 } else {
   const from = Number(arg("from") ?? 0), to = Math.min(END, Number(arg("to") ?? END));
   await encode(Math.floor(from * FPS), Math.ceil(to * FPS), path.join(PROJECT, arg("out") ?? "out/video.mp4"), flag("fast"));

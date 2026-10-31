@@ -15,6 +15,7 @@
     "qa": "node src/qa.ts",
     "review": "node tools/sheet.ts",
     "cover": "node src/cover.ts",
+    "vertical": "node src/render.ts --jobs=4 --clean && node src/vertical.ts",
     "deliver": "node src/deliver.ts"
   },
   "dependencies": { "@napi-rs/canvas": "^0.1.100" }

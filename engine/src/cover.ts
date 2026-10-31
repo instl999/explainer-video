@@ -1,7 +1,8 @@
 // Cover images (封面) for delivery: a landscape 1920×1080 and a portrait 1080×1920 JPEG built from one source frame and the
 // title. Defaults: the title is split at its first "：" into headline (white) and hook (yellow); the frame is the opening
 // shot's footage. script.json may override any of it with "cover": { "lines": ["标题第一行", …], "hook": "钩子问句",
-// "tag": "小标签", "frame": <source seconds>, "focus": <0..1, where the portrait crop centres across the frame> }.
+// "tag": "小标签", "frame": <source seconds>, "focus": <0..1, where the portrait crop centres across the frame>,
+// "font": "Display" (得意黑, default, outlined) | "Serif" (heavy 宋体, no outline — finance/commentary look) | "Sans" }.
 // Usage: node src/cover.ts   (npm run deliver also runs it unless --no-covers)  → out/cover_16x9.jpg, out/cover_9x16.jpg
 import fs from "node:fs";
 import path from "node:path";
@@ -11,9 +12,10 @@ import { measure, rr, text, type Ctx, type TextOpt } from "./draw.ts";
 import { grab } from "./footage.ts";
 import { ensureDir } from "./lib/util.ts";
 
-interface CoverSpec { lines?: string[]; hook?: string; tag?: string; frame?: number; focus?: number }
+export interface CoverSpec { lines?: string[]; hook?: string; tag?: string; frame?: number; focus?: number; font?: "Display" | "Serif" | "Sans" }
 const SH = { color: "rgba(0,0,0,0.7)", blur: 26, dy: 4 };
-const HEAD = (size: number): TextOpt => ({ size, fam: "Display", color: "#fff", stroke: "rgba(0,0,0,0.55)", strokeW: size * 0.08, shadow: SH, bold: 2 });
+let FAM: TextOpt["fam"] = "Display";
+const HEAD = (size: number): TextOpt => ({ size, fam: FAM, color: "#fff", stroke: FAM === "Display" ? "rgba(0,0,0,0.55)" : undefined, strokeW: size * 0.08, shadow: SH, bold: FAM === "Display" ? 2 : 0, mixNum: FAM !== "Serif" });
 const HOOK = (size: number): TextOpt => ({ ...HEAD(size), color: C.marker });
 
 /** Largest size ≤ cap at which `s` fits in maxW. */
@@ -60,6 +62,7 @@ async function defaultFrame(): Promise<number> {
 export async function makeCovers(): Promise<string[]> {
   registerFonts();
   const spec = ((SCRIPT as { cover?: CoverSpec }).cover ?? {}) as CoverSpec;
+  FAM = spec.font ?? "Display";
   const [head, ...rest] = SCRIPT.title.split(/[：:]/);
   const lines = spec.lines?.length ? spec.lines : [head.trim()];
   const hookText = spec.hook ?? rest.join("：").trim();
