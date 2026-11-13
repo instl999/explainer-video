@@ -1,9 +1,9 @@
-// Cover images (封面) for delivery: a landscape 1920×1080 and a portrait 1080×1920 JPEG built from one source frame and the
+// Cover images (封面) for delivery: a landscape 4:3 1440×1080 and a portrait 3:4 1080×1440 JPEG built from one source frame and the
 // title. Defaults: the title is split at its first "：" into headline (white) and hook (yellow); the frame is the opening
 // shot's footage. script.json may override any of it with "cover": { "lines": ["标题第一行", …], "hook": "钩子问句",
-// "tag": "小标签", "frame": <source seconds>, "focus": <0..1, where the portrait crop centres across the frame>,
+// "tag": "小标签", "frame": <source seconds>, "focus": <0..1, where the subject sits across the frame; both crops follow it>,
 // "font": "Display" (得意黑, default, outlined) | "Serif" (heavy 宋体, no outline — finance/commentary look) | "Sans" }.
-// Usage: node src/cover.ts   (npm run deliver also runs it unless --no-covers)  → out/cover_16x9.jpg, out/cover_9x16.jpg
+// Usage: node src/cover.ts   (npm run deliver also runs it unless --no-covers)  → out/cover_4x3.jpg, out/cover_3x4.jpg
 import fs from "node:fs";
 import path from "node:path";
 import { createCanvas, ImageData, type Canvas } from "@napi-rs/canvas";
@@ -70,43 +70,48 @@ export async function makeCovers(): Promise<string[]> {
   const frame: Canvas = createCanvas(W, H); frame.getContext("2d").putImageData(img, 0, 0);
   const outDir = ensureDir(path.join(PROJECT, "out")), files: string[] = [];
 
-  // ---- landscape 16:9: footage full-bleed. Subject on the right (focus ≥ 0.58): title block on a left shade; otherwise
-  // (subjects are usually central) a low title band so the face stays clear.
+  const focus = spec.focus ?? 0.5;
+  // ---- landscape 4:3 (1440×1080): the 16:9 frame cropped to 4:3 at full height. Subject on the right (focus ≥ 0.58):
+  // the crop keeps it at ~70 % across and the title block sits on a left shade; otherwise (subjects are usually central)
+  // the crop centres on it and a low title band keeps the face clear.
   {
-    const c = createCanvas(1920, 1080), x = c.getContext("2d");
-    x.drawImage(frame, 0, 0);
-    x.fillStyle = "rgba(0,0,0,0.18)"; x.fillRect(0, 0, 1920, 1080);
-    const side = (spec.focus ?? 0.5) >= 0.58;
+    const LW = 1440, LH = 1080, c = createCanvas(LW, LH), x = c.getContext("2d");
+    const side = focus >= 0.58;
+    const cropW = (H * LW) / LH;   // source width that maps onto the cover at full height
+    const sx = clamp(focus * W - cropW * (side ? 0.7 : 0.5), 0, W - cropW);
+    x.imageSmoothingEnabled = true; x.imageSmoothingQuality = "high";
+    x.drawImage(frame, sx, 0, cropW, H, 0, 0, LW, LH);
+    x.fillStyle = "rgba(0,0,0,0.18)"; x.fillRect(0, 0, LW, LH);
     if (side) {
-      const g = x.createLinearGradient(0, 0, 1920 * 0.72, 0); g.addColorStop(0, "rgba(0,0,0,0.85)"); g.addColorStop(1, "rgba(0,0,0,0)");
-      x.fillStyle = g; x.fillRect(0, 0, 1920, 1080);
+      const g = x.createLinearGradient(0, 0, LW * 0.72, 0); g.addColorStop(0, "rgba(0,0,0,0.85)"); g.addColorStop(1, "rgba(0,0,0,0)");
+      x.fillStyle = g; x.fillRect(0, 0, LW, LH);
     } else {
-      const g = x.createLinearGradient(0, 1080 * 0.42, 0, 1080); g.addColorStop(0, "rgba(0,0,0,0)"); g.addColorStop(0.55, "rgba(0,0,0,0.75)"); g.addColorStop(1, "rgba(0,0,0,0.9)");
-      x.fillStyle = g; x.fillRect(0, 1080 * 0.42, 1920, 1080 * 0.58);
+      const g = x.createLinearGradient(0, LH * 0.42, 0, LH); g.addColorStop(0, "rgba(0,0,0,0)"); g.addColorStop(0.55, "rgba(0,0,0,0.75)"); g.addColorStop(1, "rgba(0,0,0,0.9)");
+      x.fillStyle = g; x.fillRect(0, LH * 0.42, LW, LH * 0.58);
     }
-    const maxW = side ? 1150 : 1600, headCap = side ? 160 : 120, hookCap = side ? 150 : 130;
+    const maxW = side ? 860 : 1220, headCap = side ? 150 : 120, hookCap = side ? 140 : 130;
     const hook = splitHook(x, hookText, maxW, hookCap), bh = blockHeight(x, lines, hook, maxW, headCap, hookCap);
-    const y0 = side ? 540 - bh / 2 : 1010 - bh;
+    const y0 = side ? LH / 2 - bh / 2 : LH - 70 - bh;
     if (spec.tag) tagPill(x, spec.tag, 110, y0 - 70, 40);
     titleBlock(x, lines, hook, 110, y0, maxW, headCap, hookCap, "left");
-    const f = path.join(outDir, "cover_16x9.jpg"); fs.writeFileSync(f, await c.encode("jpeg", 92)); files.push(f);
+    const f = path.join(outDir, "cover_4x3.jpg"); fs.writeFileSync(f, await c.encode("jpeg", 92)); files.push(f);
   }
-  // ---- portrait 9:16: the frame cropped around `focus`, title block in the lower middle (clear of platform UI)
+  // ---- portrait 3:4 (1080×1440): the frame cropped around `focus`, title block in the lower middle
   {
-    const PW = 1080, PH = 1920, c = createCanvas(PW, PH), x = c.getContext("2d");
+    const PW = 1080, PH = 1440, c = createCanvas(PW, PH), x = c.getContext("2d");
     const cropW = (H * PW) / PH;   // source width that maps onto the portrait at full height
-    const sx = clamp((spec.focus ?? 0.5) * W - cropW / 2, 0, W - cropW);
+    const sx = clamp(focus * W - cropW / 2, 0, W - cropW);
     x.imageSmoothingEnabled = true; x.imageSmoothingQuality = "high";
     x.drawImage(frame, sx, 0, cropW, H, 0, 0, PW, PH);
     const top = x.createLinearGradient(0, 0, 0, PH * 0.3); top.addColorStop(0, "rgba(0,0,0,0.6)"); top.addColorStop(1, "rgba(0,0,0,0)");
     x.fillStyle = top; x.fillRect(0, 0, PW, PH * 0.3);
     const bot = x.createLinearGradient(0, PH * 0.38, 0, PH); bot.addColorStop(0, "rgba(0,0,0,0)"); bot.addColorStop(0.45, "rgba(0,0,0,0.78)"); bot.addColorStop(1, "rgba(0,0,0,0.92)");
     x.fillStyle = bot; x.fillRect(0, PH * 0.38, PW, PH * 0.62);
-    const maxW = 960, hook = splitHook(x, hookText, maxW, 140);
-    const bh = blockHeight(x, lines, hook, maxW, 150, 140), y0 = Math.min(1180, 1640 - bh);
+    const maxW = 960, headCap = 140, hookCap = 130, hook = splitHook(x, hookText, maxW, hookCap);
+    const bh = blockHeight(x, lines, hook, maxW, headCap, hookCap), y0 = Math.min(PH * 0.6, PH - 130 - bh);
     if (spec.tag) tagPill(x, spec.tag, PW / 2, y0 - 70, 40, true);
-    titleBlock(x, lines, hook, PW / 2, y0, maxW, 150, 140, "center");
-    const f = path.join(outDir, "cover_9x16.jpg"); fs.writeFileSync(f, await c.encode("jpeg", 92)); files.push(f);
+    titleBlock(x, lines, hook, PW / 2, y0, maxW, headCap, hookCap, "center");
+    const f = path.join(outDir, "cover_3x4.jpg"); fs.writeFileSync(f, await c.encode("jpeg", 92)); files.push(f);
   }
   return files;
 }
