@@ -16,7 +16,7 @@
 - Response: a stream of JSON objects (optionally SSE-wrapped); base64 PCM in `data`; ends with code 20000000.
 - Character timestamps come back **only** with `audio_params.enable_subtitle: true` (enable_timestamp returns nothing):
   `sentence.words[{word, startTime, endTime}]` in seconds; punctuation is glued to the previous character.
-- `speech_rate`: 0 = normal, 100 = 2.0×, −50 = 0.5×. 解说小明 2.0 at 10 ≈ 5.5 字/s.
+- `speech_rate`: 0 = normal, 100 = 2.0×, −50 = 0.5×. 渊博小叔 2.0 at 10 ≈ 5.7 字/s (解说小明 ≈ 3% slower).
 - `context_texts` (the line's `instruction`) steers tone and emphasis ("重读'三分之二'", "语速很快，一口气说完").
 - One request per line keeps natural prosody; the engine caches each request by hash (CACHE_DIR), ledgers cost in
   `out/cost.json` (estimated at the Agent Plan rate: 1350 AFP per 10k characters, 1 AFP = ¥0.002 → ≈ ¥0.1 per minute of

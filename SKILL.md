@@ -44,7 +44,7 @@ any strong image (a loop, an hourglass, a stamp, a before/after) — those becom
 - Hook: open on the most concrete, surprising, relatable thing — a real study, a worked number, a test the viewer can
   do at home. Turn to the viewer ("你是不是也…") inside 20 s. Then the mechanism, then the fix, then the CTA the user gave.
 - Check every claim now (WebSearch, standard mode; extended only if thin). Keep the source URLs for the final report.
-- One sentence or clause per line; ~5.5 字/s at rate 10, so 60–75 s ≈ 320–380 characters. Numbers as digits are fine
+- One sentence or clause per line; ~5.7 字/s at rate 10, so 60–75 s ≈ 330–390 characters. Numbers as digits are fine
   (2014年→二零一四, 25年→二十五年, 2%→百分之二, 4200多→四千二百多).
 - Per line: `pause` (s), optional `rate` (−50…100; 12–24 for a fast hook), `instruction` (tone, e.g. "重读'三分之二'"),
   `holds: [["phrase", 0.25]]` to stretch the gap after a phrase for free. Fields: `reference/engine.md`.

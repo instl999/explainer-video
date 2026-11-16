@@ -28,7 +28,7 @@ review/                scan sheets, previews, final sheets
   (`src/vertical.ts`). Defaults: title split at its first "：" into headline (white) + hook (yellow); frame = the first
   footage shot's `src` + 0.4 s; focus 0.5; font Display (得意黑, outlined). "Serif" = the heavy CJK serif from
   `SERIF_FONT` (no outline, serif digits) — also usable in scenes as `fam: "Serif"` (set `mixNum: false`).
-- `rate` −50…100 (0 = normal, 10 default ≈ 5.5 字/s, 24 = fast hook). `pause` = silence after the line (free to change).
+- `rate` −50…100 (0 = normal, 10 default ≈ 5.7 字/s, 24 = fast hook). `pause` = silence after the line (free to change).
 - `holds` widen the gap after a phrase at its quietest 10 ms — free, no re-synthesis.
 - Normalisation: 4-digit years before 年 read digit by digit; `x%` → 百分之x; decimals; cardinals with 两 before measure
   words. Use `lexicon` for anything else (English names, odd readings).

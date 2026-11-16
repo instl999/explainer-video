@@ -31,13 +31,13 @@ function timedChars(words: TtsWord[]): Array<[string, number, number]> {
   }
   return out;
 }
-/** Draft pace: 5.5 characters a second at rate 10 (scaled by the line rate), short rests at punctuation (fitted to 解说小明 2.0). */
+/** Draft pace: 5.7 characters a second at rate 10 (scaled by the line rate), short rests at punctuation (fitted to 渊博小叔 2.0). */
 function draftTake(spoken: string, r: number): { take: Float32Array; words: TtsWord[] } {
-  const cps = 5.5 * (1 + r / 100) / 1.1;
+  const cps = 5.7 * (1 + r / 100) / 1.1;
   const words: TtsWord[] = [];
   let t = 0.04;
   for (const c of spoken) {
-    if (PUNCT.has(c)) { t += "，、".includes(c) ? 0.17 : "：；？！".includes(c) ? 0.26 : 0.1; continue; }
+    if (PUNCT.has(c)) { t += "，、".includes(c) ? 0.2 : "：；？！".includes(c) ? 0.26 : 0.1; continue; }
     words.push({ word: c, startTime: t, endTime: t + 1 / cps }); t += 1 / cps;
   }
   return { take: new Float32Array(Math.round((t + 0.14) * SR)), words };
