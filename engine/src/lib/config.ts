@@ -41,8 +41,8 @@ export const CONFIG = {
   cacheDir: setting("CACHE_DIR", path.join(USER_DIR, "cache")),
   /** Where `npm run deliver` copies the finished video and subtitles (default: the folder holding the project). */
   outputDir: setting("OUTPUT_DIR", path.dirname(ROOT)),
-  /** Default voice; script.json "speaker" overrides it. 解说小明 2.0. */
-  speaker: setting("TTS_SPEAKER", "zh_male_jieshuoxiaoming_uranus_bigtts"),
+  /** Default voice; script.json "speaker" overrides it. 渊博小叔 2.0. */
+  speaker: setting("TTS_SPEAKER", "zh_male_yuanboxiaoshu_uranus_bigtts"),
   /** Resource id for TTS 2.0 voices (the *_uranus_* speakers). */
   ttsResource: setting("TTS_RESOURCE_ID", "seed-tts-2.0"),
   /** Folder holding ffmpeg(.exe) and ffprobe(.exe); empty = look in WinGet's Gyan.FFmpeg install, then PATH. */

@@ -1,4 +1,4 @@
-// Narration: Doubao Speech Synthesis 2.0 (解说小明 2.0), one request per sentence so each keeps natural prosody; results cached by
+// Narration: Doubao Speech Synthesis 2.0 (default 渊博小叔 2.0), one request per sentence so each keeps natural prosody; results cached by
 // request hash and ledgered. "holds" widen the natural gap after a phrase without re-synthesising.
 // --draft builds the same files from a fitted pace model (silent audio, no API call) so the edit can be laid out first.
 // Writes vo/voice.wav (48 kHz mono) and vo/alignment.json (per-character times on the display text).

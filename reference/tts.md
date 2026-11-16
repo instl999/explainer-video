@@ -21,7 +21,7 @@
 - One request per line keeps natural prosody; the engine caches each request by hash (CACHE_DIR), ledgers cost in
   `out/cost.json` (estimated at the Agent Plan rate: 1350 AFP per 10k characters, 1 AFP = ¥0.002 → ≈ ¥0.1 per minute of
   narration; Doubao Speech 2.0 is billed per character on the speech console's own price list).
-- Voices (2.0): 解说小明 `zh_male_jieshuoxiaoming_uranus_bigtts` (default, 轻快解说), 磁性解说男声
+- Voices (2.0): 渊博小叔 `zh_male_yuanboxiaoshu_uranus_bigtts` (default), 解说小明 `zh_male_jieshuoxiaoming_uranus_bigtts` (轻快解说), 磁性解说男声
   `zh_male_cixingjieshuonan_uranus_bigtts`, 悬疑解说 `zh_male_xuanyijieshuo_uranus_bigtts`, 广告解说
   `zh_male_guanggaojieshuo_uranus_bigtts`. Use the one the user names.
 - Errors: Doubao — HTTP 401 "Invalid X-Api-Key" / auth failures = wrong credentials, or the key belongs to the other

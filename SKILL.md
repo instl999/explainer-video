@@ -1,6 +1,6 @@
 ---
 name: explainer-video
-description: Turn the user's footage plus copy (文案) into a finished 16:9 Chinese 财经/知识 explainer short video — rewrite the script around a strong hook, fact-check it, voice it with Volcano Engine Doubao Speech Synthesis 2.0 (豆包语音合成模型2.0, 默认 解说小明2.0), cut the footage with canvas motion graphics, auto-pick BGM and sound effects from the user's own libraries, mix, QA and deliver. Use whenever the user gives a video file (usually with copy or a topic) and asks to 精剪/剪成讲解短视频, 做动效, 合成配音, 横屏16:9, or to choose bgm/音效 from their folders.
+description: Turn the user's footage plus copy (文案) into a finished 16:9 Chinese 财经/知识 explainer short video — rewrite the script around a strong hook, fact-check it, voice it with Volcano Engine Doubao Speech Synthesis 2.0 (豆包语音合成模型2.0, 默认 渊博小叔2.0), cut the footage with canvas motion graphics, auto-pick BGM and sound effects from the user's own libraries, mix, QA and deliver. Use whenever the user gives a video file (usually with copy or a topic) and asks to 精剪/剪成讲解短视频, 做动效, 合成配音, 横屏16:9, or to choose bgm/音效 from their folders.
 ---
 
 # 16:9 explainer: footage + copy → final.mp4
