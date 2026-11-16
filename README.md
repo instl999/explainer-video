@@ -18,7 +18,7 @@ it from there:
 1. **Studies the footage**: cut list and contact sheets; it skips clips with burned-in subtitles or watermarks.
 2. **Rewrites the script around a hook** for the first 20 seconds, and **fact-checks** every number, study and quote.
    Unverifiable claims are hedged or shown with their assumptions.
-3. **Voices it** with Volcano Engine Doubao Speech Synthesis 2.0 (豆包语音合成模型2.0, default voice 渊博小叔 2.0), with
+3. **Voices it** with Volcano Engine Doubao Speech Synthesis 2.0 (豆包语音合成模型2.0, default voice 大壹 2.0), with
    per-character timestamps. A Volcano Ark Agent Plan key also works as a fallback.
 4. **Cuts and animates** at 1920×1080, 30 fps on a canvas engine. Explanations are paper boards with ink diagrams;
    footage gets callouts, rings and stamps. Kinetic type is synced to every word; transitions and camera moves are
@@ -62,7 +62,7 @@ variables override both.
 | `SFX_DIR` | no | `~/Desktop/布斯的音效库` | Sound-effect library (roles are relative to it) |
 | `OUTPUT_DIR` | no | folder holding the project | Where finished videos are copied |
 | `CACHE_DIR` | no | `~/.explainer-video/cache` | Cached TTS results (re-runs are free) |
-| `TTS_SPEAKER` | no | `zh_male_yuanboxiaoshu_uranus_bigtts` | Default voice (渊博小叔 2.0) |
+| `TTS_SPEAKER` | no | `zh_male_dayi_uranus_bigtts` | Default voice (大壹 2.0) |
 | `TTS_RESOURCE_ID` | no | `seed-tts-2.0` | Resource id for TTS 2.0 voices |
 | `FFMPEG_DIR` | no | auto-detected | Folder with `ffmpeg.exe`/`ffprobe.exe` |
 | `JP_FONT` | no | Yu Gothic Bold | Font with Japanese glyphs |
@@ -72,7 +72,7 @@ variables override both.
 
 ## Use
 
-Ask in Claude Code, for example: *"把这个视频精剪为财经讲解短视频，配音用渊博小叔2.0，横屏16:9，bgm 和音效从我的文件夹里选"*,
+Ask in Claude Code, for example: *"把这个视频精剪为财经讲解短视频，配音用大壹2.0，横屏16:9，bgm 和音效从我的文件夹里选"*,
 with the video and copy attached. The skill scaffolds a project and runs the whole process.
 
 To run a project by hand:

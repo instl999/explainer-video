@@ -16,12 +16,12 @@
 - Response: a stream of JSON objects (optionally SSE-wrapped); base64 PCM in `data`; ends with code 20000000.
 - Character timestamps come back **only** with `audio_params.enable_subtitle: true` (enable_timestamp returns nothing):
   `sentence.words[{word, startTime, endTime}]` in seconds; punctuation is glued to the previous character.
-- `speech_rate`: 0 = normal, 100 = 2.0×, −50 = 0.5×. 渊博小叔 2.0 at 10 ≈ 5.7 字/s (解说小明 ≈ 3% slower).
+- `speech_rate`: 0 = normal, 100 = 2.0×, −50 = 0.5×. 大壹 2.0 at 10 ≈ 5.8 字/s while speaking, ≈ 5.2 字/s over a whole script with pauses (309 字 in 59.3 s); 解说小明 and 渊博小叔 are within ~5%.
 - `context_texts` (the line's `instruction`) steers tone and emphasis ("重读'三分之二'", "语速很快，一口气说完").
 - One request per line keeps natural prosody; the engine caches each request by hash (CACHE_DIR), ledgers cost in
   `out/cost.json` (estimated at the Agent Plan rate: 1350 AFP per 10k characters, 1 AFP = ¥0.002 → ≈ ¥0.1 per minute of
   narration; Doubao Speech 2.0 is billed per character on the speech console's own price list).
-- Voices (2.0): 渊博小叔 `zh_male_yuanboxiaoshu_uranus_bigtts` (default), 解说小明 `zh_male_jieshuoxiaoming_uranus_bigtts` (轻快解说), 磁性解说男声
+- Voices (2.0): 大壹 `zh_male_dayi_uranus_bigtts` (default, 视频配音男声), 渊博小叔 `zh_male_yuanboxiaoshu_uranus_bigtts`, 解说小明 `zh_male_jieshuoxiaoming_uranus_bigtts` (轻快解说), 磁性解说男声
   `zh_male_cixingjieshuonan_uranus_bigtts`, 悬疑解说 `zh_male_xuanyijieshuo_uranus_bigtts`, 广告解说
   `zh_male_guanggaojieshuo_uranus_bigtts`. Use the one the user names.
 - Errors: Doubao — HTTP 401 "Invalid X-Api-Key" / auth failures = wrong credentials, or the key belongs to the other

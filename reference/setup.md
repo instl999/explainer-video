@@ -30,7 +30,7 @@ Save as UTF-8; use forward slashes in paths.
 | `SFX_DIR` | no | `~/Desktop/布斯的音效库` | Effect library; `engine/src/sfx-roles.ts` paths are relative to it. |
 | `OUTPUT_DIR` | no | folder holding the project | Where `npm run deliver` copies `<title>_16比9讲解版.mp4/.srt`. |
 | `CACHE_DIR` | no | `~/.explainer-video/cache` | Paid TTS results by request hash (re-runs free). Copy it along to keep old results. |
-| `TTS_SPEAKER` | no | `zh_male_yuanboxiaoshu_uranus_bigtts` | Default voice (渊博小叔 2.0); `script.json` `speaker` overrides. |
+| `TTS_SPEAKER` | no | `zh_male_dayi_uranus_bigtts` | Default voice (大壹 2.0); `script.json` `speaker` overrides. |
 | `TTS_RESOURCE_ID` | no | `seed-tts-2.0` | Resource id for TTS 2.0 (`*_uranus_*`) voices. |
 | `FFMPEG_DIR` | no | auto (WinGet, then PATH) | Folder with `ffmpeg.exe`/`ffprobe.exe` for a manual install. |
 | `JP_FONT` | no | `C:/Windows/Fonts/YuGothB.ttc` | A font with Japanese glyphs (book titles). |

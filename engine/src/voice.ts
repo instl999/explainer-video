@@ -1,4 +1,4 @@
-// Narration: Doubao Speech Synthesis 2.0 (default 渊博小叔 2.0), one request per sentence so each keeps natural prosody; results cached by
+// Narration: Doubao Speech Synthesis 2.0 (default 大壹 2.0), one request per sentence so each keeps natural prosody; results cached by
 // request hash and ledgered. "holds" widen the natural gap after a phrase without re-synthesising.
 // --draft builds the same files from a fitted pace model (silent audio, no API call) so the edit can be laid out first.
 // Writes vo/voice.wav (48 kHz mono) and vo/alignment.json (per-character times on the display text).
@@ -31,9 +31,9 @@ function timedChars(words: TtsWord[]): Array<[string, number, number]> {
   }
   return out;
 }
-/** Draft pace: 5.7 characters a second at rate 10 (scaled by the line rate), short rests at punctuation (fitted to 渊博小叔 2.0). */
+/** Draft pace: 5.8 characters a second at rate 10 (scaled by the line rate), short rests at punctuation (fitted to 大壹 2.0). */
 function draftTake(spoken: string, r: number): { take: Float32Array; words: TtsWord[] } {
-  const cps = 5.7 * (1 + r / 100) / 1.1;
+  const cps = 5.8 * (1 + r / 100) / 1.1;
   const words: TtsWord[] = [];
   let t = 0.04;
   for (const c of spoken) {

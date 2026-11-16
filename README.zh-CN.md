@@ -16,7 +16,7 @@
 
 1. **看素材**：生成切点列表和逐秒缩略图，自动避开带烧录字幕、水印的片段。
 2. **围绕钩子重写文案**，把前 20 秒做成强钩子；**逐条核实**数字、研究和引文，核实不了的就加限定或在画面上写明假设。
-3. **配音**：火山引擎 豆包语音合成模型2.0（默认 渊博小叔 2.0），带逐字时间戳；也可退而使用火山方舟 Agent Plan Key。
+3. **配音**：火山引擎 豆包语音合成模型2.0（默认 大壹 2.0），带逐字时间戳；也可退而使用火山方舟 Agent Plan Key。
 4. **剪辑和动效**：1920×1080、30fps 的画布引擎。讲道理用纸面手绘图解，素材上加标注、圈画和印章；
    文字逐字跟着配音弹出，转场和镜头运动都对齐到词。
 5. **用你自己的素材库配乐**：按文件名前的情绪标签选 BGM，自动算好切入点让重拍落在关键词上；约 66 种音效角色随动作出现。
@@ -52,7 +52,7 @@ git clone https://github.com/instl999/explainer-video "%USERPROFILE%/.claude/ski
 | `SFX_DIR` | 否 | `~/Desktop/布斯的音效库` | 音效库（音效角色的路径相对于它） |
 | `OUTPUT_DIR` | 否 | 项目所在文件夹 | 成片复制到哪里 |
 | `CACHE_DIR` | 否 | `~/.explainer-video/cache` | 配音缓存（重跑免费） |
-| `TTS_SPEAKER` | 否 | `zh_male_yuanboxiaoshu_uranus_bigtts` | 默认音色（渊博小叔 2.0） |
+| `TTS_SPEAKER` | 否 | `zh_male_dayi_uranus_bigtts` | 默认音色（大壹 2.0） |
 | `TTS_RESOURCE_ID` | 否 | `seed-tts-2.0` | TTS 2.0 音色的资源 ID |
 | `FFMPEG_DIR` | 否 | 自动查找 | `ffmpeg.exe`/`ffprobe.exe` 所在文件夹 |
 | `JP_FONT` | 否 | Yu Gothic Bold | 含日文字形的字体 |
@@ -62,7 +62,7 @@ git clone https://github.com/instl999/explainer-video "%USERPROFILE%/.claude/ski
 
 ## 使用
 
-在 Claude Code 里附上视频和文案直接说，例如：*"把这个视频精剪为财经讲解短视频，配音用渊博小叔2.0，横屏16:9，bgm 和音效从我的文件夹里选"*。
+在 Claude Code 里附上视频和文案直接说，例如：*"把这个视频精剪为财经讲解短视频，配音用大壹2.0，横屏16:9，bgm 和音效从我的文件夹里选"*。
 Skill 会自己建项目、走完整个流程。
 
 想手动跑一个项目：
